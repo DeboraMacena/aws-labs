@@ -21,6 +21,8 @@ Zero spend budget – avisa no primeiro centavo cobrado
 Orçamento mensal de US$5 – alerta ao atingir 80%
 Arquitetura
 Usuário root (MFA, guardado para emergências)
+
+
         │
         └── IAM
              └── Grupo: Administradores (AdministratorAccess)
