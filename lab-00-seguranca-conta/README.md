@@ -1,4 +1,6 @@
 Lab 00 – Segurança inicial da conta AWS
+
+
 Objetivo
 
 Preparar uma conta AWS nova seguindo boas práticas de segurança e controle de custos antes de criar qualquer recurso.
