@@ -1,0 +1,59 @@
+# Lab 00 – Segurança inicial da conta AWS
+
+## Objetivo
+Preparar uma conta AWS nova seguindo boas práticas de segurança e controle de custos antes de criar qualquer recurso.
+
+## Serviços utilizados
+- **AWS IAM** – usuários e políticas
+- **MFA** – autenticação multifator
+- **AWS Budgets** – alertas de custo por e-mail
+- **Cost Explorer / Billing** – acompanhamento de créditos e custos por serviço
+
+## O que foi feito
+1. Criação da conta no **Free Plan**
+2. **MFA (TOTP)** ativado no AWS Builder ID usado para acessar o console
+3. Usuário IAM **debora-admin** criado com a política `AdministratorAccess`, reservado para acesso programático (AWS CLI) nos próximos labs
+   - O Free Plan não permite criar grupos no IAM, então a política foi anexada direto ao usuário. Em ambiente corporativo, o recomendado é atribuir permissões a grupos.
+   - Nas contas novas, usuários IAM não têm login no console nem opção de MFA: o acesso ao console é feito pelo AWS Builder ID.
+4. Alertas de custo configurados no **AWS Budgets**, com aviso por e-mail:
+   - **My Zero-Spend Budget** – avisa assim que houver qualquer gasto
+   - **My Monthly Cost Budget** – orçamento mensal de US$10
+5. Acompanhamento de créditos e custos por serviço no **Billing** e no **Cost Explorer**
+   - No Free Plan, os custos são descontados dos créditos, sem cobrança no cartão; a conta é encerrada quando os créditos acabam.
+
+## Arquitetura
+```
+AWS Builder ID (MFA) ← login no console
+        │
+        └── IAM
+             └── Usuário: debora-admin (AdministratorAccess) ← acesso via CLI nos próximos labs
+
+AWS Budgets ──► alertas por e-mail (zero spend e US$10/mês)
+Free Plan ──► custos descontados dos créditos (sem cobrança no cartão)
+```
+
+## Evidências
+| Etapa | Print |
+|---|---|
+| MFA no acesso principal | ![MFA](prints/01-mfa-root.png) |
+| Permissões do usuário | ![Permissões](prints/02-usuario-permissoes.png) |
+| Créditos e custos | ![Custos](prints/03-custos.png) |
+| Alertas de orçamento | ![Budgets](prints/04-budgets.png) |
+
+> Prints com ID da conta e e-mails ocultados.
+
+## Conceitos aplicados
+- **Gestão de identidades:** login humano no console protegido com MFA; usuário IAM separado para automação
+- **Grupos x permissão direta:** a boa prática é usar grupos; aqui foi aplicada permissão direta por limitação do Free Plan
+- **Modelo de responsabilidade compartilhada:** a segurança do acesso à conta é responsabilidade do cliente
+- **Controle de custos:** alertas configurados antes de criar recursos e acompanhamento dos créditos a cada lab
+
+## Dificuldades e aprendizados
+- Em contas criadas a partir de out/2026, o MFA do acesso principal fica em **Profile → Gerenciar perfil → Segurança** (AWS Builder ID), e não mais em Security credentials.
+- O Free Plan não permite criar grupos no IAM; a política foi anexada direto ao usuário.
+- Usuários IAM não têm a seção Console sign-in nem MFA nas contas novas; o login no console é centralizado no AWS Builder ID.
+- A busca do console não encontrava o AWS Budgets (retornava apenas o Billing Conductor, sem acesso), mas o serviço está disponível em **Billing and Cost Management → Budgets**.
+<!-- Complete com suas palavras: o que mais você não sabia e como resolveu. -->
+
+## Próximo lab
+[Lab 01 – Site estático no S3 + CloudFront](../lab-01-site-s3-cloudfront)
